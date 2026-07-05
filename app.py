@@ -13,27 +13,26 @@ st.markdown("### **Número de Cuenta:** 20211930058")
 st.write("Introduzca los datos del cliente para segmentar su nivel de riesgo médico mediante K-Means.")
 st.write("---") 
 
-# --- CARGA DEL MODELO (Tal como lo pidió la ingeniera) ---
+# --- CARGA DEL MODELO (Ruta corregida para la doble carpeta) ---
 @st.cache_resource
 def cargar_modelo():
     try:
-        return joblib.load("models/kmeans_riesgo_actuarial.pkl")
+        # Forzamos la ruta exacta debido a la estructura de carpetas duplicada
+        return joblib.load("cargos_medicos/models/kmeans_riesgo_actuarial.pkl")
     except Exception as e:
-        st.error(f"No se pudo cargar el modelo. Verifique que el archivo esté en 'models/kmeans_riesgo_actuarial.pkl'. Error: {e}")
+        st.error(f"No se pudo cargar el modelo. Verifique la ruta interna. Error: {e}")
         st.stop()
 
 modelo = cargar_modelo()
 
 # Mapeo estándar de los 3 clústeres entrenados en clase
-# Nota: Si en tu Colab el clúster 0 era el de cargos más bajos, el orden es Bajo, Medio, Alto.
-# Este diccionario traduce el número que da el modelo a texto comprensible.
 mapa_riesgo = {
     0: "Bajo",
     1: "Medio",
     2: "Alto"
 }
 
-# --- FORMULARIO INTERACTIVO (Complementando el diccionario estático de la ingeniera) ---
+# --- FORMULARIO INTERACTIVO ---
 st.subheader("Datos Demográficos y Factores de Riesgo")
 
 col1, col2 = st.columns(2)
@@ -55,7 +54,7 @@ charges = st.number_input("Cargos Médicos Históricos Anuales ($):", min_value=
 # --- BOTÓN DE EVALUACIÓN ---
 if st.button("Evaluar Nivel de Riesgo Actuarial"):
     
-    # Construcción exacta del DataFrame estructurado tal como lo dejó la ingeniera
+    # Construcción exacta del DataFrame estructurado
     cliente = pd.DataFrame([{
         "age": age,
         "sex": sex.lower(),
@@ -68,7 +67,7 @@ if st.button("Evaluar Nivel de Riesgo Actuarial"):
     
     with st.spinner("Calculando asignación de Clúster..."):
         try:
-            # Predicción idéntica al código de la ingeniera:
+            # Predicción con el modelo cargado
             cluster = modelo.predict(cliente)[0]
             
             # Obtener el nivel de riesgo asociado al número de clúster
