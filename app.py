@@ -13,12 +13,12 @@ st.markdown("### **Número de Cuenta:** 20211930058")
 st.write("Introduzca los datos del cliente para segmentar su nivel de riesgo médico mediante K-Means.")
 st.write("---") 
 
-# --- CARGA DEL MODELO (Ruta corregida para la doble carpeta) ---
+# --- CARGA DEL MODELO (Ruta ajustada exactamente a tu GitHub) ---
 @st.cache_resource
 def cargar_modelo():
     try:
-        # Forzamos la ruta exacta debido a la estructura de carpetas duplicada
-        return joblib.load("cargos_medicos/models/kmeans_riesgo_actuarial.pkl")
+        # Apunta directamente a la carpeta donde están tus archivos sueltos en GitHub
+        return joblib.load("cargos_medicos/kmeans_riesgo_actuarial.pkl")
     except Exception as e:
         st.error(f"No se pudo cargar el modelo. Verifique la ruta interna. Error: {e}")
         st.stop()
